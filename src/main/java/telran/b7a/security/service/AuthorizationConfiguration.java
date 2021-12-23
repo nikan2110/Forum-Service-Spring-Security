@@ -40,7 +40,7 @@ public class AuthorizationConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.PUT, "/forum/post/{id}/**")
 				.access("@customSecurity.checkPostAuthority(#id, authentication.name)")
 			.antMatchers(HttpMethod.DELETE, "/forum/post/{id}/**")
-				.access("@customSecurity.checkPostAuthority(#id, authentication.name) or hasRole('MODERATOR')")
+				.access("@customSecurity.checkPostAuthority(#id, authentication.name) or hasRole('MODERATOR')")		
 			.anyRequest()
 				.authenticated();
 	}

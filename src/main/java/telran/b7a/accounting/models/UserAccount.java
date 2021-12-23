@@ -1,5 +1,6 @@
 package telran.b7a.accounting.models;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,10 +26,13 @@ public class UserAccount {
 	@Setter
 	@Singular
 	Set<String> roles;
+	@Setter
+	LocalDate passworDate;
 	
 	public UserAccount() {
 		roles = new HashSet<>(Arrays.asList("USER"));
 		roles.add("USER");
+		passworDate = LocalDate.of(2021, 11, 22);
 	}
 
 	public UserAccount(String login, String password, String firstName, String lastName) {
