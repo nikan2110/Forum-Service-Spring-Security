@@ -1,8 +1,7 @@
 package telran.b7a.accounting.controller;
 
-import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,16 +34,18 @@ public class AccountingController {
 	}
 
 	@PostMapping("/login")
-	public UserDto loginUser(Principal principal) {
-		return accountingService.loginAccount(principal.getName());
+	public UserDto loginUser(Authentication authentication) {
+		return accountingService.loginAccount(authentication.getName());
 	}
 
 	@DeleteMapping("/user/{user}")
+//	@PreAuthorize("#user == authentication.name or hasRole('ADMINISTRATOR')")
 	public UserDto removeUser(@PathVariable String user) {
 		return accountingService.removeAccount(user);
 	}
 
 	@PutMapping("/user/{user}")
+//	@PreAuthorize("#user == authentication.name")
 	public UserDto updateUser(@PathVariable String user, @RequestBody UpdateUserDto newCredential) {
 		return accountingService.updateAccount(user, newCredential);
 	}
@@ -60,8 +61,8 @@ public class AccountingController {
 	}
 
 	@PutMapping("/password")
-	public void changePassword(Principal principal, @RequestHeader("X-Password") String newPassword) {
-		accountingService.changePassword(principal.getName(), newPassword);
+	public void changePassword(Authentication authentication, @RequestHeader("X-Password") String newPassword) {
+		accountingService.changePassword(authentication.getName(), newPassword);
 	}
 
 }

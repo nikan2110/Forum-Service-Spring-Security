@@ -1,6 +1,5 @@
 package telran.b7a.accounting.service;
 
-import telran.b7a.accounting.dto.LoginAndPasswordDto;
 import telran.b7a.accounting.dto.NewAccountDto;
 import telran.b7a.accounting.dto.RoleDto;
 import telran.b7a.accounting.dto.UpdateUserDto;
