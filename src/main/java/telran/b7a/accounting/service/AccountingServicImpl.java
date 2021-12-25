@@ -1,7 +1,5 @@
 package telran.b7a.accounting.service;
 
-import java.time.LocalDate;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -87,8 +85,7 @@ public class AccountingServicImpl implements AccountingService {
 	@Override
 	public void changePassword(String login, String newPassword) {
 		UserAccount user = find(login);
-		user.setPassword(passwordEncoder.encode(newPassword));
-		user.setPassworDate(LocalDate.now());
+		user.changePassword(passwordEncoder.encode(newPassword));
 		accountMongoRepository.save(user);
 	}
 

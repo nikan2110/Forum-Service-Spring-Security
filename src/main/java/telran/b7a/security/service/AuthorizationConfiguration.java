@@ -27,6 +27,10 @@ public class AuthorizationConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers("/forum/posts/**")
 				.permitAll()
+			.antMatchers("/account/password/**")
+				.authenticated()
+			.antMatchers("/forum/**", "/account/**")
+				.access("@customSecurity.checkDate(authentication.name)")
 			.antMatchers("/account/user/{login}/role/{role}/**")	
 				.hasAnyRole("Administrator".toUpperCase())
 			.antMatchers(HttpMethod.PUT,"/account/user/{user}/**")
@@ -40,9 +44,10 @@ public class AuthorizationConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.PUT, "/forum/post/{id}/**")
 				.access("@customSecurity.checkPostAuthority(#id, authentication.name)")
 			.antMatchers(HttpMethod.DELETE, "/forum/post/{id}/**")
-				.access("@customSecurity.checkPostAuthority(#id, authentication.name) or hasRole('MODERATOR')")		
+				.access("@customSecurity.checkPostAuthority(#id, authentication.name) or hasRole('MODERATOR')")
 			.anyRequest()
 				.authenticated();
+				
 	}
 
 }

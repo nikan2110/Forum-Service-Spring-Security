@@ -15,6 +15,7 @@ import lombok.Singular;
 @Getter
 @EqualsAndHashCode(of = "login")
 public class UserAccount {
+	private static final long NUMBER_OF_DAYS = 30;
 	@Id
 	String login;
 	@Setter
@@ -27,12 +28,12 @@ public class UserAccount {
 	@Singular
 	Set<String> roles;
 	@Setter
-	LocalDate passworDate;
+	LocalDate expPassworDate;
 	
 	public UserAccount() {
 		roles = new HashSet<>(Arrays.asList("USER"));
 		roles.add("USER");
-		passworDate = LocalDate.of(2021, 11, 22);
+		expPassworDate = LocalDate.now().plusDays(NUMBER_OF_DAYS);
 	}
 
 	public UserAccount(String login, String password, String firstName, String lastName) {
@@ -42,6 +43,12 @@ public class UserAccount {
 		this.lastName = lastName;
 		roles = new HashSet<String>();
 		roles.add("USER");
+	}
+
+	public void changePassword(String encodePassword) {
+		this.password = encodePassword;
+		expPassworDate = LocalDate.now().plusDays(NUMBER_OF_DAYS);
+		
 	}
 
 }

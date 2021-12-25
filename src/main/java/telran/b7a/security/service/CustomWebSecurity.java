@@ -1,7 +1,6 @@
 package telran.b7a.security.service;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import telran.b7a.forum.models.Post;
 @Service("customSecurity")
 public class CustomWebSecurity {
 
-	private static final long COUNT_OF_DAYS = 30;
 	ForumMongoRepository forumMongoRepository;
 	AccountMongoRepository accountMongoRepository;
 
@@ -33,14 +31,7 @@ public class CustomWebSecurity {
 	
 	public boolean checkDate(String login) {
 		UserAccount user = accountMongoRepository.findById(login).orElse(null);
-		if (user == null) {
-			return false;
-		}
-		long days = ChronoUnit.DAYS.between(user.getPassworDate(), LocalDate.now());
-		if (days > COUNT_OF_DAYS) {
-			return false;
-		}
-		return true;
+		return user != null && LocalDate.now().isBefore(user.getExpPassworDate());
 		
 	}
 
