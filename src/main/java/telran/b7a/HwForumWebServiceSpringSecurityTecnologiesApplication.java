@@ -1,5 +1,7 @@
 package telran.b7a;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -31,6 +33,7 @@ public class HwForumWebServiceSpringSecurityTecnologiesApplication implements Co
 			UserAccount account = new UserAccount("admin", password, "", "");
 			account.getRoles().add("Moderator".toUpperCase());
 			account.getRoles().add("Administrator".toUpperCase());
+			account.setExpPassworDate(LocalDate.now().plusYears(30));
 			accountRepository.save(account);
 		}
 		

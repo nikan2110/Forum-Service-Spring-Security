@@ -1,5 +1,6 @@
 package telran.b7a.security.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,11 +8,15 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 //@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthorizationConfiguration extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	ExpiredPasswordFilter expiredPasswordFilter;
 	
 	@Override
 	public void configure(WebSecurity web) {
@@ -24,13 +29,14 @@ public class AuthorizationConfiguration extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		http.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//		http.addFilterAfter(expiredPasswordFilter, BasicAuthenticationFilter.class);
 		http.authorizeRequests()
 			.antMatchers("/forum/posts/**")
 				.permitAll()
 			.antMatchers("/account/password/**")
 				.authenticated()
 			.antMatchers("/forum/**", "/account/**")
-				.access("@customSecurity.checkDate(authentication.name)")
+				.access("@customSecurity.checkDate(authentication)")
 			.antMatchers("/account/user/{login}/role/{role}/**")	
 				.hasAnyRole("Administrator".toUpperCase())
 			.antMatchers(HttpMethod.PUT,"/account/user/{user}/**")

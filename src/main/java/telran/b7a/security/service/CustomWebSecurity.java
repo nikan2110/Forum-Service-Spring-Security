@@ -1,12 +1,10 @@
 package telran.b7a.security.service;
 
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import telran.b7a.accounting.dao.AccountMongoRepository;
-import telran.b7a.accounting.models.UserAccount;
 import telran.b7a.forum.dao.ForumMongoRepository;
 import telran.b7a.forum.models.Post;
 
@@ -29,9 +27,9 @@ public class CustomWebSecurity {
 
 	}
 	
-	public boolean checkDate(String login) {
-		UserAccount user = accountMongoRepository.findById(login).orElse(null);
-		return user != null && LocalDate.now().isBefore(user.getExpPassworDate());
+	public boolean checkDate(Authentication authentication) {
+		UserDetailsConfiguration uds = (UserDetailsConfiguration)authentication.getPrincipal(); 
+		return uds.isExpiredPassword(); 
 		
 	}
 
